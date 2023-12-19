@@ -23,7 +23,7 @@ Table of Contents
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.3
+=VERSION 0.1.0
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 

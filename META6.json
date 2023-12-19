@@ -1,0 +1,31 @@
+{
+    "name" : "Display::Listings",
+    "description" : "A Raku module for displaying lines in a listing.",
+    "perl" : "6.d",
+    "license" : "LGPL-3.0-or-later",
+    "authors" : [
+        "Francis Grizzly Smit <grizzly@smit.id.au>"
+    ],
+    "depends": [
+        "Terminal::Width",
+        "Terminal::WCWidth",
+        "Term::termios",
+        "Terminal::ANSI",
+        "Gzz::Text::Utils",
+        "Syntax::Highlighters"
+    ],
+    "provides" : {
+        "Display::Listings" : "lib/Display/Listings.rakumod"
+    },
+    "source-url" : "https://github.com/grizzlysmit/Display-Listings.git",
+    "support" : {
+        "source" : "https://github.com/grizzlysmit/Display-Listings.git",
+        "email" : "grizzly@smit.id.au",
+        "bugtracker": "https://github.com/grizzlysmit/Display-Listings/issues"
+    },
+    "auth": "zef:grizzlysmit",
+    "version" : "0.1.0",
+    "tags" : [ "text", "formatted", "listing", "ANSI", "highlighted" ],
+  "test-depends": [
+  ]
+}

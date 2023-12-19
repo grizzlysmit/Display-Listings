@@ -1,0 +1,32 @@
+use v6;
+use lib 'lib';
+use Test;
+
+use Display::Listings;
+
+plan 4;
+
+my Str:D $prefix = '';
+my Str:D $key-name = 'key';
+my Str:D @fields = 'host', 'port', 'comment';
+my   %defaults = port => 22;
+
+my   %rows = one => { host => 'example.com', type => 'host', port => 22 }, two => { type => 'alias', host => 'one', comment => 'An alias' }, three => { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine' };
+my Bool:D $colour = False;
+my Bool:D $syntax = True;
+my Int:D $page-length = 20;
+my Regex:D $pattern = rx:i/ ^ .* 'smit' .* $/;
+
+my @rows = {key => 'one', host => 'example.com', type => 'host', port => 22 }, { type => 'alias', host => 'one', comment => 'An alias', key => 'two', }, { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine', key => 'three' };
+
+is(list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows), True);
+
+is(list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows), True);
+
+$pattern = rx/ ^ .* $/;
+
+is(list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows), True);
+
+is(list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows), True);
+
+done-testing;

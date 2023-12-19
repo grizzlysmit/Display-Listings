@@ -582,6 +582,9 @@ footer {
  <tr class="toc-level-1"><td class="toc-text"><a href="#Name">Name</a></td></tr>
  <tr class="toc-level-1"><td class="toc-text"><a href="#Copyright">Copyright</a></td></tr>
  <tr class="toc-level-1"><td class="toc-text"><a href="#Introduction">Introduction</a></td></tr>
+ <tr class="toc-level-3"><td class="toc-text"><a href="#list-by(…)">list-by(…)</a></td></tr>
+ <tr class="toc-level-3"><td class="toc-text"><a href="#Examples:">Examples:</a></td></tr>
+ <tr class="toc-level-4"><td class="toc-text"><a href="#A_more_complete_example:">A more complete example:</a></td></tr>
 </table></div>
 </nav><div id="Display::Listings_0"></div><div class="subtitle"><p>A Raku module for displaying lines in a listing.</p></div><div class="pod-body"><section name="___top"><h1 id="Display::Listings"><a href="#___top" class="u" title="go to top of document">Display::Listings</a></h1>
 <h2 id="Table_of_Contents"><a href="#___top" class="u" title="go to top of document">Table of Contents</a></h2>
@@ -593,11 +596,9 @@ footer {
 <li><p><a href="#subtitle">SUBTITLE</a></p></li>
 <li><p><a href="#copyright">COPYRIGHT</a></p></li>
 <li><p><a href="#introduction">Introduction</a></p></li>
-<li><p><a href="#introduction">Introduction</a></p></li>
-<li><p><a href="#introduction">Introduction</a></p></li>
-<li><p><a href="#introduction">Introduction</a></p></li>
-<li><p><a href="#introduction">Introduction</a></p></li>
-<li><p><a href="#introduction">Introduction</a></p></li>
+<li><p><a href="#list-by">list-by(…)</a></p></li>
+<li><p><a href="#examples">Examples:</a></p></li>
+<li><p><a href="#a-more-complete-example">A more complete example:</a></p></li>
 </ul>
 <section>
 <h1 id="Name"><a href="#___top" class="u" title="go to top of document">NAME</a></h1>
@@ -608,8 +609,268 @@ footer {
 <p>LGPL V3.0+ <a href="https://github.com/grizzlysmit/Display-Listings/blob/main/LICENSE">LICENSE</a></p>
 </section>
 <p><a href="#table-of-contents">Top of Document</a></p><h1 id="Introduction"><a href="#Display::Listings_0" class="u" title="go to top of document">Introduction</a></h1>
-<p>A <strong>Raku</strong> module for managing the users GUI Editor preferences in a variety of programs. </p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-19T12:39:19Z</span></div></footer>
+<p>A <strong>Raku</strong> module for managing the users GUI Editor preferences in a variety of programs. </p></section><section name="pod"><h3 id="list-by(…)"><a href="#Display::Listings_0" class="u" title="go to top of document">list-by(…)</a></h3>
+<p>This is a multi sub it has two signatures.</p><pre class="pod-block-code">multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length,
+                  Regex:D $pattern, Str:D $key-name, Str:D @fields, %defaults, %rows,
+                  Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
+                  Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  :&amp;include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row, 
+                  :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value, 
+                  :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between,
+                  :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value, 
+                  :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between,
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting --&gt; Bool:D) is export {
+
+</pre><p><a href="#table-of-contents">Top of Document</a></p><p>And</p><pre class="pod-block-code">multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length,
+                  Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
+                  Bool:D :$starts-with-blank = True,
+                  Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  :&amp;include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row-array, 
+                  :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value-array, 
+                  :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between-array,
+                  :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value-array, 
+                  :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between-array,
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting-array --&gt; Bool:D) is export {
+
+</pre><p><strong>Note: you have to be careful writing your own callbacks like <code>:&amp;include-row</code> you need to get the signature of said callback exactly right or you will run into difficult to debug errors, with no version of the <code>list-by</code> multi sub matching etc.</strong> </p><p><a href="#table-of-contents">Top of Document</a></p><h3 id="Examples:"><a href="#Display::Listings_0" class="u" title="go to top of document">Examples:</a></h3>
+<pre class="pod-block-code">use Display::Listings;
+
+my Str:D $prefix = '';
+my Str:D $key-name = 'key';
+my Str:D @fields = 'host', 'port', 'comment';
+my   %defaults = port =&gt; 22;
+
+my   %rows = one =&gt; { host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 }, two =&gt; { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias' }, three =&gt; { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine' };
+my Bool:D $colour = False;
+my Bool:D $syntax = True;
+my Int:D $page-length = 20;
+my Regex:D $pattern = rx:i/ ^ .* 'smit' .* $/;
+
+my @rows = {key =&gt; 'one', host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 }, { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias', key =&gt; 'two', }, { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine', key =&gt; 'three' };
+
+list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
+
+list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows);
+
+$pattern = rx/ ^ .* $/;
+
+list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
+
+list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows);
+
+</pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="A_more_complete_example:"><a href="#Display::Listings_0" class="u" title="go to top of document">A more complete example:</a></h4>
+<pre class="pod-block-code">sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export {
+    my Str:D $key-name = 'key';
+    my Str:D @fields = 'host', 'port', 'comment';
+    my   %defaults = port =&gt; 22;
+    sub include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --&gt; Bool:D) {
+        return True if $key.starts-with($prefix, :ignorecase) &amp;&amp; $key ~~ $pattern;
+        for @fields -&gt; $field {
+            my Str:D $value = '';
+            with %row{$field} { #`««« if %row{$field} does not exist then a Any will be retured,
+                                  and if some cases, you may return undefined values so use
+                                  some sort of guard this is one way to do that, you could
+                                  use %row{$field}:exists or :!exists or // perhaps.
+                                  TIMTOWTDI rules as always. »»»
+                $value = ~%row{$field};
+            }
+            return True if $value.starts-with($prefix, :ignorecase) &amp;&amp; $value ~~ $pattern;
+        }
+        return False;
+    } # sub include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, @fields, %row --&gt; Bool:D) #
+    sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+        if $syntax {
+            t.color(0, 255, 255) ~ $field;
+        } elsif $colour {
+            t.color(0, 255, 255) ~ $field;
+        } else {
+            return $field;
+        }
+    } #`««« sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) »»»
+    sub head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+        if $colour {
+            if $syntax {
+                given $field {
+                    when 'key'     { return t.color(0, 255, 255) ~ ' sep '; }
+                    when 'host'    { return t.color(0, 255, 255) ~ ' : ';   }
+                    when 'port'    { return t.color(0, 255, 255)   ~ ' # ';   }
+                    when 'comment' { return t.color(0, 0, 255)   ~ '  ';    }
+                    default { return ''; }
+                }
+            } else {
+                given $field {
+                    when 'key'     { return t.color(0, 255, 255)   ~ ' sep '; }
+                    when 'host'    { return t.color(0, 255, 255)   ~ ' : ';   }
+                    when 'port'    { return t.color(0, 255, 255)   ~ ' # ';   }
+                    when 'comment' { return t.color(0, 255, 255)   ~ '  ';    }
+                    default { return ''; }
+                }
+            }
+        } else {
+            given $field {
+                when 'key'     { return ' sep '; }
+                when 'host'    { return ' : ';   }
+                when 'port'    { return ' # ';   }
+                when 'comment' { return '  ';    }
+                default        { return '';      }
+            }
+        }
+    } #`««« sub head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) »»»
+    sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+        if $syntax {
+            given $field {
+                when 'key'     { return t.color(0, 255, 255) ~ ~$value; }
+                when 'host'    {
+                    my Str:D $type = %row«type»;
+                    if $type eq 'host' {
+                        return t.color(255, 0, 255) ~ ~$value;
+                    } else {
+                        return t.color(0, 255, 255) ~ ~$value;
+                    }
+                }
+                when 'port'    { 
+                    my Str:D $type = %row«type»;
+                    if $type eq 'host' {
+                        return t.color(255, 0, 255) ~ ~$value;
+                    } else {
+                        return t.color(255, 0, 255) ~ '';
+                    }
+                }
+                when 'comment' { return t.color(0, 0, 255) ~ ~$value; }
+                default        { return t.color(255, 0, 0) ~ '';      }
+            } # given $field #
+        } elsif $colour {
+            given $field {
+                when 'key'     { return t.color(0, 0, 255) ~ ~$value; }
+                when 'host'    { return t.color(0, 0, 255) ~ ~$value; }
+                when 'port'    { 
+                    my Str:D $type = %row«type»;
+                    if $type eq 'host' {
+                        return t.color(0, 0, 255) ~ ~$value;
+                    } else {
+                        return t.color(0, 0, 255) ~ '';
+                    }
+                }
+                when 'comment' { return t.color(0, 0, 255) ~ ~$value; }
+                default        { return t.color(255, 0, 0) ~ '';      }
+            }
+        } else {
+            given $field {
+                when 'key'     { return ~$value; }
+                when 'host'    { return ~$value; }
+                when 'port'    { 
+                    my Str:D $type = %row«type»;
+                    if $type eq 'host' {
+                        return ~$value;
+                    } else {
+                        return '';
+                    }
+                }
+                when 'comment' { return ~$value; }
+                default        { return '';      }
+            }
+        }
+    } #`««« sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
+    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+        if $syntax {
+                given $field {
+                    when 'key'     {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return t.color(255, 0, 0) ~ '  =&gt; ';
+                        } else {
+                            return t.color(255, 0, 0) ~ ' --&gt; ';
+                        }
+                    }
+                    when 'host'    {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return t.color(255, 0, 0) ~ ' : ';
+                        } else {
+                            return t.color(255, 0, 0) ~ '   ';
+                        }
+                    }
+                    when 'port'    { return t.color(0, 0, 255) ~ ' # '; }
+                    when 'comment' { return t.color(0, 0, 255) ~ '  ';  }
+                    default        { return t.color(255, 0, 0) ~ '';    }
+                }
+        } elsif $colour {
+                given $field {
+                    when 'key'     {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return t.color(0, 0, 255) ~ '  =&gt; ';
+                        } else {
+                            return t.color(0, 0, 255) ~ ' --&gt; ';
+                        }
+                    }
+                    when 'host'    {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return t.color(0, 0, 255) ~ ' : ';
+                        } else {
+                            return t.color(0, 0, 255) ~ '   ';
+                        }
+                    }
+                    when 'port'    { return t.color(0, 0, 255) ~ ' # '; }
+                    when 'comment' { return t.color(0, 0, 255) ~ '  ';  }
+                    default        { return t.color(255, 0, 0) ~ '';    }
+                }
+        } else {
+                given $field {
+                    when 'key'     {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return '  =&gt; ';
+                        } else {
+                            return ' --&gt; ';
+                        }
+                    }
+                    when 'host'    {
+                        my Str:D $type = %row«type»;
+                        if $type eq 'host' {
+                            return ' : ';
+                        } else {
+                            return '   ';
+                        }
+                    }
+                    when 'port'    { return ' # '; }
+                    when 'comment' { return '  ';  }
+                    default        { return '';    }
+                }
+        }
+    } #`««« sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
+    sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) {
+        if $colour {
+            if $syntax { 
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+            } else {
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+            }
+        } else {
+            return '';
+        }
+    } #`««« sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) »»»
+    #`«««
+    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
+                                          :start-cnt(-3), :starts-with-blank, :overline-header(''), :underline-header, :underline('='), 
+                                          :put-line-at-bottom, :line-at-bottom, :line-at-bottom('='), 
+                                            :&amp;include-row, :&amp;head-value, :&amp;head-between, :&amp;field-value, :&amp;between, :&amp;row-formatting);
+    #»»»
+    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
+                                            :&amp;include-row, :&amp;head-value, :&amp;head-between, :&amp;field-value, :&amp;between, :&amp;row-formatting);
+} #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export »»»
+
+</pre><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-19T13:07:29Z</span></div></footer>
 	</body>
 </html>
 

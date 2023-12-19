@@ -111,13 +111,17 @@ my Str:D $key-name = 'key';
 my Str:D @fields = 'host', 'port', 'comment';
 my   %defaults = port => 22;
 
-my   %rows = one => { host => 'example.com', type => 'host', port => 22 }, two => { type => 'alias', host => 'one', comment => 'An alias' }, three => { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine' };
+my   %rows = one => { host => 'example.com', type => 'host', port => 22 },
+             two => { type => 'alias', host => 'one', comment => 'An alias' },
+             three => { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine' };
 my Bool:D $colour = False;
 my Bool:D $syntax = True;
 my Int:D $page-length = 20;
 my Regex:D $pattern = rx:i/ ^ .* 'smit' .* $/;
 
-my @rows = {key => 'one', host => 'example.com', type => 'host', port => 22 }, { type => 'alias', host => 'one', comment => 'An alias', key => 'two', }, { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine', key => 'three' };
+my @rows = {key => 'one', host => 'example.com', type => 'host', port => 22 },
+           { type => 'alias', host => 'one', comment => 'An alias', key => 'two', },
+           { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine', key => 'three' };
 
 list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
 
@@ -135,7 +139,8 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @
 #### A more complete example:
 
 ```raku
-sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --> Bool:D) is export {
+sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
+                    Int:D $page-length, Regex:D $pattern --> Bool:D) is export {
     my Str:D $key-name = 'key';
     my Str:D @fields = 'host', 'port', 'comment';
     my   %defaults = port => 22;
@@ -246,8 +251,10 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-lengt
                 default        { return '';      }
             }
         }
-    } #`««« sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) »»»
-    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+    } #`««« sub field-value(Int:D $idx, Str:D $field, $value, Bool:D
+                            $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) »»»
+    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax,
+                                                Str:D @fields, %row --> Str:D) {
         if $syntax {
                 given $field {
                     when 'key'     {
@@ -315,7 +322,8 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-lengt
                     default        { return '';    }
                 }
         }
-    } #`««« sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) »»»
+    } #`««« sub between(Int:D $idx, Str:D $field, Bool:D $colour,
+                    Bool:D $syntax, Str:D @fields, %row --> Str:D) »»»
     sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) {
         if $colour {
             if $syntax { 
@@ -333,15 +341,11 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-lengt
             return '';
         }
     } #`««« sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) »»»
-    #`«««
-    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
-                                          :start-cnt(-3), :starts-with-blank, :overline-header(''), :underline-header, :underline('='), 
-                                          :put-line-at-bottom, :line-at-bottom, :line-at-bottom('='), 
-                                            :&include-row, :&head-value, :&head-between, :&field-value, :&between, :&row-formatting);
-    #»»»
-    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
-                                            :&include-row, :&head-value, :&head-between, :&field-value, :&between, :&row-formatting);
-} #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --> Bool:D) is export »»»
+    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields,
+                            %defaults, %the-lot, :&include-row, :&head-value, :&head-between,
+                            :&field-value, :&between, :&row-formatting);
+} #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax,
+                        Int:D $page-length, Regex:D $pattern --> Bool:D) is export »»»
 ```
 
 [Top of Document](#table-of-contents)

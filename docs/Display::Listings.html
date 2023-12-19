@@ -642,13 +642,17 @@ my Str:D $key-name = 'key';
 my Str:D @fields = 'host', 'port', 'comment';
 my   %defaults = port =&gt; 22;
 
-my   %rows = one =&gt; { host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 }, two =&gt; { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias' }, three =&gt; { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine' };
+my   %rows = one =&gt; { host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 },
+             two =&gt; { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias' },
+             three =&gt; { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine' };
 my Bool:D $colour = False;
 my Bool:D $syntax = True;
 my Int:D $page-length = 20;
 my Regex:D $pattern = rx:i/ ^ .* 'smit' .* $/;
 
-my @rows = {key =&gt; 'one', host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 }, { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias', key =&gt; 'two', }, { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine', key =&gt; 'three' };
+my @rows = {key =&gt; 'one', host =&gt; 'example.com', type =&gt; 'host', port =&gt; 22 },
+           { type =&gt; 'alias', host =&gt; 'one', comment =&gt; 'An alias', key =&gt; 'two', },
+           { port =&gt; 345, host =&gt; 'www.smit.id.au', type =&gt; 'host', comment =&gt; 'mine all mine', key =&gt; 'three' };
 
 list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
 
@@ -661,7 +665,8 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %
 list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows);
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="A_more_complete_example:"><a href="#Display::Listings_0" class="u" title="go to top of document">A more complete example:</a></h4>
-<pre class="pod-block-code">sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export {
+<pre class="pod-block-code">sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
+                    Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export {
     my Str:D $key-name = 'key';
     my Str:D @fields = 'host', 'port', 'comment';
     my   %defaults = port =&gt; 22;
@@ -772,8 +777,10 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @
                 default        { return '';      }
             }
         }
-    } #`««« sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
-    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+    } #`««« sub field-value(Int:D $idx, Str:D $field, $value, Bool:D
+                            $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
+    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax,
+                                                Str:D @fields, %row --&gt; Str:D) {
         if $syntax {
                 given $field {
                     when 'key'     {
@@ -841,7 +848,8 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @
                     default        { return '';    }
                 }
         }
-    } #`««« sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
+    } #`««« sub between(Int:D $idx, Str:D $field, Bool:D $colour,
+                    Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) »»»
     sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) {
         if $colour {
             if $syntax { 
@@ -859,18 +867,14 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @
             return '';
         }
     } #`««« sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) »»»
-    #`«««
-    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
-                                          :start-cnt(-3), :starts-with-blank, :overline-header(''), :underline-header, :underline('='), 
-                                          :put-line-at-bottom, :line-at-bottom, :line-at-bottom('='), 
-                                            :&amp;include-row, :&amp;head-value, :&amp;head-between, :&amp;field-value, :&amp;between, :&amp;row-formatting);
-    #»»»
-    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %the-lot,
-                                            :&amp;include-row, :&amp;head-value, :&amp;head-between, :&amp;field-value, :&amp;between, :&amp;row-formatting);
-} #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export »»»
+    return list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields,
+                            %defaults, %the-lot, :&amp;include-row, :&amp;head-value, :&amp;head-between,
+                            :&amp;field-value, :&amp;between, :&amp;row-formatting);
+} #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax,
+                        Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export »»»
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-19T13:07:29Z</span></div></footer>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-19T13:16:26Z</span></div></footer>
 	</body>
 </html>
 

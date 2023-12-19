@@ -113,7 +113,8 @@ my   %defaults = port => 22;
 
 my   %rows = one => { host => 'example.com', type => 'host', port => 22 },
              two => { type => 'alias', host => 'one', comment => 'An alias' },
-             three => { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine' };
+             three => { port => 345, host => 'www.smit.id.au', type => 'host',
+                                                    comment => 'mine all mine' };
 my Bool:D $colour = False;
 my Bool:D $syntax = True;
 my Int:D $page-length = 20;
@@ -121,17 +122,21 @@ my Regex:D $pattern = rx:i/ ^ .* 'smit' .* $/;
 
 my @rows = {key => 'one', host => 'example.com', type => 'host', port => 22 },
            { type => 'alias', host => 'one', comment => 'An alias', key => 'two', },
-           { port => 345, host => 'www.smit.id.au', type => 'host', comment => 'mine all mine', key => 'three' };
+           { port => 345, host => 'www.smit.id.au', type => 'host',
+                                            comment => 'mine all mine', key => 'three' };
 
-list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
+list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name,
+                                                         @fields, %defaults, %rows);
 
 list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows);
 
 $pattern = rx/ ^ .* $/;
 
-list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name, @fields, %defaults, %rows);
+list-by($prefix, $colour, $syntax, $page-length, $pattern, $key-name,
+                                                         @fields, %defaults, %rows);
 
-list-by($prefix, $colour, $syntax, $page-length, $pattern, @fields, %defaults, @rows);
+list-by($prefix, $colour, $syntax, $page-length, $pattern,
+                                                         @fields, %defaults, @rows);
 ```
 
 [Top of Document](#table-of-contents)
@@ -144,22 +149,28 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
     my Str:D $key-name = 'key';
     my Str:D @fields = 'host', 'port', 'comment';
     my   %defaults = port => 22;
-    sub include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --> Bool:D) {
+    sub include-row(Str:D $prefix, Regex:D $pattern, Str:D $key,
+                                                Str:D @fields, %row --> Bool:D) {
         return True if $key.starts-with($prefix, :ignorecase) && $key ~~ $pattern;
         for @fields -> $field {
             my Str:D $value = '';
-            with %row{$field} { #`««« if %row{$field} does not exist then a Any will be retured,
-                                  and if some cases, you may return undefined values so use
-                                  some sort of guard this is one way to do that, you could
-                                  use %row{$field}:exists or :!exists or // perhaps.
-                                  TIMTOWTDI rules as always. »»»
+            with %row{$field} { #`««« if %row{$field} does not exist then a Any
+                                      will be returned, and if some cases, you
+                                      may return undefined values so use some
+                                      sort of guard this is one way to do that,
+                                      you could use %row{$field}:exists or
+                                      :!exists or // perhaps.
+                                      TIMTOWTDI rules as always. »»»
                 $value = ~%row{$field};
             }
-            return True if $value.starts-with($prefix, :ignorecase) && $value ~~ $pattern;
+            return True if $value.starts-with($prefix, :ignorecase)
+                                                         && $value ~~ $pattern;
         }
         return False;
-    } # sub include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, @fields, %row --> Bool:D) #
-    sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+    } # sub include-row(Str:D $prefix, Regex:D $pattern,
+                                        Str:D $key, @fields, %row --> Bool:D) #
+    sub head-value(Int:D $indx, Str:D $field, Bool:D $colour,
+                                        Bool:D $syntax, Str:D @fields --> Str:D) {
         if $syntax {
             t.color(0, 255, 255) ~ $field;
         } elsif $colour {
@@ -167,8 +178,11 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
         } else {
             return $field;
         }
-    } #`««« sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) »»»
-    sub head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+    } #`««« sub head-value(Int:D $indx, Str:D $field,
+                                        Bool:D $colour, Bool:D $syntax,
+                                        Str:D @fields --> Str:D) »»»
+    sub head-between(Int:D $idx, Str:D $field, Bool:D $colour,
+                                        Bool:D $syntax, Str:D @fields --> Str:D) {
         if $colour {
             if $syntax {
                 given $field {
@@ -196,8 +210,10 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
                 default        { return '';      }
             }
         }
-    } #`««« sub head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) »»»
-    sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+    } #`««« sub head-between(Int:D $idx, Str:D $field, Bool:D $colour,
+                            Bool:D $syntax, Str:D @fields --> Str:D) »»»
+    sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour,
+                        Bool:D $syntax, Str:D @fields, %row --> Str:D) {
         if $syntax {
             given $field {
                 when 'key'     { return t.color(0, 255, 255) ~ ~$value; }
@@ -327,15 +343,23 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
     sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) {
         if $colour {
             if $syntax { 
-                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
-                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
-                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
-                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue
+                                  if $cnt == -3; # three heading lines. #
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue
+                                                          if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue
+                                                          if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !!
+                                  t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
             } else {
-                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
-                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
-                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
-                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue
+                                                          if $cnt == -3;
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue
+                                                          if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue
+                                                          if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !!
+                              t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
             }
         } else {
             return '';

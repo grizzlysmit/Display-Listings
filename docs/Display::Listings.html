@@ -24,7 +24,7 @@ Av8AAAD/AAAAAAAAAEAAAAAAAAAAGQAAAP/RAACR/35+/wAAAP8A+wL/AAAA2gAAAGX/AADa/35+
 AAAAZQAAAP8AAAD/AAAAAAAAAAAAAABlAAAA/4WFhQEAAAD/AAAAQAAAAAAAAAD/AAAA2gAAAGUA
 AAAAj/kAAAZgAAADgAAAgAEAAOAHAADgBwAAwAMAAIABAACAAQAAAAEAAAAAAAAAAAAAAAAAAAPA
 AACH4QAAzrMAAA==" rel="icon" type="image/x-icon" /><meta name="author" value="Francis Grizzly Smit (grizzly@smit.id.au)" />
-<meta name="version" value="0.1.0" />
+<meta name="version" value="0.1.1" />
 <style>.comment {
   color: #666; }
 
@@ -614,25 +614,25 @@ footer {
                   Regex:D $pattern, Str:D $key-name, Str:D @fields, %defaults, %rows,
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&amp;include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row, 
                   :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value, 
                   :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between,
                   :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value, 
                   :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between,
-                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting --&gt; Bool:D) is export {
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting --&gt; Bool:D) is export
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p><p>And</p><pre class="pod-block-code">multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length,
                   Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&amp;include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row-array, 
                   :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value-array, 
                   :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between-array,
                   :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value-array, 
                   :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between-array,
-                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting-array --&gt; Bool:D) is export {
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting-array --&gt; Bool:D) is export
 
 </pre><p><strong>Note: you have to be careful writing your own callbacks like <code>:&amp;include-row</code> you need to get the signature of said callback exactly right or you will run into difficult to debug errors, with no version of the <code>list-by</code> multi sub matching etc.</strong> </p><p><a href="#table-of-contents">Top of Document</a></p><h3 id="Examples:"><a href="#Display::Listings_0" class="u" title="go to top of document">Examples:</a></h3>
 <pre class="pod-block-code">use Display::Listings;
@@ -898,7 +898,7 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern,
                         Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export »»»
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-19T13:32:02Z</span></div></footer>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-23T19:34:59Z</span></div></footer>
 	</body>
 </html>
 

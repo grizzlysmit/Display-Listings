@@ -37,7 +37,7 @@ Francis Grizzly Smit (grizzly@smit.id.au)
 VERSION
 =======
 
-0.1.0
+0.1.1
 
 TITLE
 =====
@@ -70,13 +70,13 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D $key-name, Str:D @fields, %defaults, %rows,
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export {
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export
 ```
 
 [Top of Document](#table-of-contents)
@@ -88,13 +88,13 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --> Bool:D) = &default-include-row-array, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value-array, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between-array,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value-array, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between-array,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export {
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export
 ```
 
 **Note: you have to be careful writing your own callbacks like `:&include-row` you need to get the signature of said callback exactly right or you will run into difficult to debug errors, with no version of the `list-by` multi sub matching etc.** 

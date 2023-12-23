@@ -1,4 +1,4 @@
-unit module Display::Listings:ver<0.1.0>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
+unit module Display::Listings:ver<0.1.1>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
 
 =begin pod
 
@@ -23,7 +23,7 @@ Table of Contents
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.0
+=VERSION 0.1.1
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 
@@ -59,13 +59,13 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D $key-name, Str:D @fields, %defaults, %rows,
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export {
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export
 
 =end code
 
@@ -79,13 +79,13 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --> Bool:D) = &default-include-row-array, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value-array, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between-array,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value-array, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between-array,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export {
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export
 
 =end code
 
@@ -459,7 +459,7 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D $key-name, Str:D @fields, %defaults, %rows,
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,
@@ -571,7 +571,8 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
     #           print the rows           #
     #                                    #
     ######################################
-    for @result.sort( { .lc } ) -> $value {
+    @result .=sort( { .lc } ) if $sort;
+    for @result -> $value {
         put &row-formatting($cnt, $colour, $syntax) ~ Sprintf("%-*s", $width, $value) ~ ($colour ?? t.text-reset !! '');
         $cnt++;
         ##########################################
@@ -635,7 +636,7 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True, Str:D :$overline-header = '',
                   Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,
@@ -720,7 +721,7 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --> Bool:D) = &default-include-row-array, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value-array, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between-array,
@@ -734,16 +735,17 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
     #    calculate the widths for each field   #
     #                                          #
     ############################################
-    my Int:D @field-widths = @fields.map: -> Str:D $elt { hwcswidth($elt) }; # set the widths to the widths of the headings. #
+    # set the widths to the widths of the headings. #
+    my Int:D @field-widths = @fields.kv.map: -> Int:D $ind, Str:D $elt { hwcswidth(&head-value($ind, $elt, $colour, $syntax, @fields)) };
     my Int:D @between-widths = @fields.kv.map: -> Int:D $ind, Str:D $field { hwcswidth(&head-between($ind, $field, $colour, $syntax, @fields)) };
     my Int:D $no-more-fields = -1; # -1 represents infinity #
     ROW: for @rows.kv -> $indx, %row {
         if &include-row($prefix, $pattern, $indx, @fields, %row) {
             for @fields.kv -> $ind, $field {
+                #dd $indx, %row, $ind, $field;
                 my $value;
                 if %row{$field}:!exists { # as soon as a field does'nt exist we assume the rest dont exist #
                     if %defaults{$field}:!exists {
-                        $no-more-fields = max($no-more-fields, $ind);
                         next ROW;
                     } else {
                         $value = %defaults{$field};
@@ -751,6 +753,8 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                 } else {
                     $value = %row{$field};
                 }
+                $no-more-fields = max($no-more-fields, $ind + 1);
+                #dd $field, $value;
                 my $w = hwcswidth(&field-value($ind, $field, $value, $colour, $syntax, @fields, %row));
                 @field-widths[$ind]  = max(@field-widths[$ind], $w);
                 my Int:D $between = hwcswidth(&between($ind, $field, $colour, $syntax, @fields, %row));
@@ -758,8 +762,11 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
             } # for @fields.kv -> $ind, $field #
         } # if &include-row($prefix, $pattern, $key, @fields, %row) #
     } # ROW: for %rows.kv -> $key, %row #
-    my Int:D $width = [+] @field-widths + [+] @between-widths;
+    #dd @field-widths, @between-widths;
+    my Int:D $width = ([+] @field-widths) + ([+] @between-widths);
+    #dd $width, $no-more-fields;
     $no-more-fields = @fields.elems if $no-more-fields < 0;
+    #dd $width, $no-more-fields;
     ############################################
     #                                          #
     #             Colect the data              #
@@ -825,7 +832,8 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
     #           print the rows           #
     #                                    #
     ######################################
-    for @result.sort( { .lc } ) -> $value {
+    @result .=sort( { .lc } ) if $sort;
+    for @result -> $value {
         put &row-formatting($cnt, $colour, $syntax) ~ Sprintf("%-*s", $width, $value) ~ ($colour ?? t.text-reset !! '');
         $cnt++;
         ##########################################
@@ -886,7 +894,7 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Regex:D $pattern, Str:D @fields, %defaults, %rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
-                  Bool:D :$put-line-at-bottom = True, Str:D $line-at-bottom = '=',
+                  Bool:D :$put-line-at-bottom = True, Str:D $line-at-bottom = '=', Bool:D :$sort = True,
                   :&include-row:(Str:D $pref, Regex $pat, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,

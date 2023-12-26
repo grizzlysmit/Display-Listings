@@ -1,4 +1,4 @@
-unit module Display::Listings:ver<0.1.8>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
+unit module Display::Listings:ver<0.1.9>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
 
 =begin pod
 
@@ -28,7 +28,7 @@ Table of Contents
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.8
+=VERSION 0.1.9
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 

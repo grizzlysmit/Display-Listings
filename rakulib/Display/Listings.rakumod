@@ -845,6 +845,8 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
 
 =head3 The hash of hashes stuff
 
+L<Top of Document|#table-of-contents>
+
 =begin code :lang<raku>
 
 sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --> Bool:D) is export {

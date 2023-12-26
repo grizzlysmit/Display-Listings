@@ -559,6 +559,8 @@ The default callbacks
 
 ### The hash of hashes stuff
 
+[Top of Document](#table-of-contents)
+
 ```raku
 sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --> Bool:D) is export {
     return True if $key.starts-with($prefix, :ignorecase) && $key ~~ $pattern;

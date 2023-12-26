@@ -1077,7 +1077,7 @@ sub list-editors-backups(Str:D $prefix,
 </pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="An_Example_of_the_above_code_list-editors-backups(…)_at_work:"><a href="#Display::Listings_0" class="u" title="go to top of document">An Example of the above code <strong><code>list-editors-backups(…)</code></strong> at work:</a></h4>
 <p>!<a href="/docs/images/sc-list-editors-backups.png.html">image not available here go to the github page</a></p><p><a href="#table-of-contents">Top of Document</a></p></section><section name="pod"><h2 id="The_default_callbacks"><a href="#Display::Listings_0" class="u" title="go to top of document">The default callbacks</a></h2>
 <h3 id="The_hash_of_hashes_stuff"><a href="#Display::Listings_0" class="u" title="go to top of document">The hash of hashes stuff</a></h3>
-<pre class="pod-block-code">sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --&gt; Bool:D) is export {
+<p><a href="#table-of-contents">Top of Document</a></p><pre class="pod-block-code">sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --&gt; Bool:D) is export {
     return True if $key.starts-with($prefix, :ignorecase) &amp;&amp; $key ~~ $pattern;
     for @fields -&gt; $field {
         my Str:D $value = '';
@@ -1244,7 +1244,7 @@ multi sub default-zip-flags(Str:D @fields --&gt; Hash[Str:D] ) is export {
 }
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-26T22:52:10Z</span></div></footer>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-26T22:54:38Z</span></div></footer>
 	</body>
 </html>
 

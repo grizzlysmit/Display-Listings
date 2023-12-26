@@ -587,6 +587,9 @@ footer {
  <tr class="toc-level-4"><td class="toc-text"><a href="#A_more_complete_example:">A more complete example:</a></td></tr>
  <tr class="toc-level-4"><td class="toc-text"><a href="#Another_example">Another example</a></td></tr>
  <tr class="toc-level-4"><td class="toc-text"><a href="#An_Example_of_the_above_code_list-editors-backups(…)_at_work:">An Example of the above code list-editors-backups(…) at work:</a></td></tr>
+ <tr class="toc-level-2"><td class="toc-text"><a href="#The_default_callbacks">The default callbacks</a></td></tr>
+ <tr class="toc-level-3"><td class="toc-text"><a href="#The_hash_of_hashes_stuff">The hash of hashes stuff</a></td></tr>
+ <tr class="toc-level-3"><td class="toc-text"><a href="#The_array_of_hashes_stuff">The array of hashes stuff</a></td></tr>
 </table></div>
 </nav><div id="Display::Listings_0"></div><div class="subtitle"><p>A Raku module for displaying lines in a listing.</p></div><div class="pod-body"><section name="___top"><h1 id="Display::Listings"><a href="#___top" class="u" title="go to top of document">Display::Listings</a></h1>
 <h2 id="Table_of_Contents"><a href="#___top" class="u" title="go to top of document">Table of Contents</a></h2>
@@ -608,6 +611,11 @@ footer {
 <li><p><a href="#An-Example-of-the-above-code-list-editors-backups-at-work">An Example of the above code <strong><code>list-editors-backups(…)</code></strong> at work:</a></p></li>
 </ul>
 </ul>
+</ul>
+<li><p><a href="#the-default-callbacks">The default callbacks</a></p></li>
+<ul>
+<li><p><a href="#the-hash-of-hashes-stuff">The hash of hashes stuff</a></p></li>
+<li><p><a href="#the-array-of-hashes-stuff">The array of hashes stuff</a></p></li>
 </ul>
 </ul>
 <section>
@@ -1067,8 +1075,176 @@ sub list-editors-backups(Str:D $prefix,
                          Int:D $page-length --&gt; Bool:D) is export »»»
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="An_Example_of_the_above_code_list-editors-backups(…)_at_work:"><a href="#Display::Listings_0" class="u" title="go to top of document">An Example of the above code <strong><code>list-editors-backups(…)</code></strong> at work:</a></h4>
-<p>!<a href="/docs/images/sc-list-editors-backups.png.html">image not available here go to the github page</a></p><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-26T21:07:34Z</span></div></footer>
+<p>!<a href="/docs/images/sc-list-editors-backups.png.html">image not available here go to the github page</a></p><p><a href="#table-of-contents">Top of Document</a></p></section><section name="pod"><h2 id="The_default_callbacks"><a href="#Display::Listings_0" class="u" title="go to top of document">The default callbacks</a></h2>
+<h3 id="The_hash_of_hashes_stuff"><a href="#Display::Listings_0" class="u" title="go to top of document">The hash of hashes stuff</a></h3>
+<pre class="pod-block-code">sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --&gt; Bool:D) is export {
+    return True if $key.starts-with($prefix, :ignorecase) &amp;&amp; $key ~~ $pattern;
+    for @fields -&gt; $field {
+        my Str:D $value = '';
+        with %row{$field} { #`««« if %row{$field} does not exist then a Any will be retured,
+                                  and if some cases, you may return undefined values so use
+                                  some sort of guard this is one way to do that, you could
+                                  use %row{$field}:exists or :!exists or // perhaps.
+                                  TIMTOWTDI rules as always. »»»
+            $value = ~%row{$field};
+        }
+        return True if $value.starts-with($prefix, :ignorecase) &amp;&amp; $value ~~ $pattern;
+    }
+    return False;
+}
+
+sub default-head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 255, 255) ~ $field;
+        } else {
+            return t.color(0, 255, 255) ~ $field;
+        }
+    } else {
+        return $field;
+    }
+}
+
+sub default-field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+    my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D; if
+                                           this asumption is false you will
+                                           need to wrte your own function
+                                           to pass to list-by(…) »»»
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 0, 255) ~ $val;
+        } else {
+            return t.color(0, 0, 255) ~ $val;
+        }
+    } else {
+        return $val;
+    }
+}
+
+sub default-head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) is export {
+    if $idx &lt; @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) is export {
+    if $idx &lt; @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) is export {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        } else {
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        }
+    } else {
+        return '';
+    }
+}
+
+multi sub default-zip-flags(Str:D $key-name, Str:D @fields --&gt; Hash[Str:D] ) is export {
+    my Str:D %hash = @fields Z=&gt; @fields.map: { '-' };
+    %hash{$key-name} = '-';
+    return %hash;
+}
+
+</pre><h3 id="The_array_of_hashes_stuff"><a href="#Display::Listings_0" class="u" title="go to top of document">The array of hashes stuff</a></h3>
+<pre class="pod-block-code">sub default-include-row-array(Str:D $prefix, Regex:D $pattern, Int:D $indx, Str:D @fields, %row --&gt; Bool:D) is export {
+    for @fields -&gt; $field {
+        my Str:D $value = ~(%row{$field} // '');
+        return True if $value.starts-with($prefix, :ignorecase) &amp;&amp; $value ~~ $pattern;
+    }
+    return False;
+}
+
+sub default-head-value-array(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 255, 255) ~ $field;
+        } else {
+            return t.color(0, 255, 255) ~ $field;
+        }
+    } else {
+        return $field;
+    }
+}
+
+sub default-field-value-array(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+    my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D; if
+                                           this asumption is false you will
+                                           need to wrte your own function
+                                           to pass to list-by(…) »»»
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 0, 255) ~ $val;
+        } else {
+            return t.color(0, 0, 255) ~ $val;
+        }
+    } else {
+        return $val;
+    }
+}
+
+sub default-head-between-array(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) is export {
+    if $idx &lt; @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-between-array(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) is export {
+    if $idx &lt; @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-row-formatting-array(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) is export {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        } else {
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        }
+    } else {
+        return '';
+    }
+}
+
+multi sub default-zip-flags(Str:D @fields --&gt; Hash[Str:D] ) is export {
+    my Str:D %hash = @fields Z=&gt; @fields.map: { '-' };
+    return %hash;
+}
+
+</pre></section>		</div>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-26T21:32:09Z</span></div></footer>
 	</body>
 </html>
 

@@ -22,6 +22,9 @@ Table of Contents
 =item3 L<A more complete example:|#a-more-complete-example>
 =item3 L<Another example:|#another-example>
 =item4 L<An Example of the above code B<C<list-editors-backups(…)>> at work:|#An-Example-of-the-above-code-list-editors-backups-at-work>
+=item1 L<The default callbacks|#the-default-callbacks>
+=item2 L<The hash of hashes stuff|#the-hash-of-hashes-stuff>
+=item2 L<The array of hashes stuff|#the-array-of-hashes-stuff>
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
@@ -835,6 +838,189 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between,
                   :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export »»»
+
+=begin pod
+
+=head2 The default callbacks
+
+=head3 The hash of hashes stuff
+
+=begin code :lang<raku>
+
+sub default-include-row(Str:D $prefix, Regex:D $pattern, Str:D $key, Str:D @fields, %row --> Bool:D) is export {
+    return True if $key.starts-with($prefix, :ignorecase) && $key ~~ $pattern;
+    for @fields -> $field {
+        my Str:D $value = '';
+        with %row{$field} { #`««« if %row{$field} does not exist then a Any will be retured,
+                                  and if some cases, you may return undefined values so use
+                                  some sort of guard this is one way to do that, you could
+                                  use %row{$field}:exists or :!exists or // perhaps.
+                                  TIMTOWTDI rules as always. »»»
+            $value = ~%row{$field};
+        }
+        return True if $value.starts-with($prefix, :ignorecase) && $value ~~ $pattern;
+    }
+    return False;
+}
+
+sub default-head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 255, 255) ~ $field;
+        } else {
+            return t.color(0, 255, 255) ~ $field;
+        }
+    } else {
+        return $field;
+    }
+}
+
+sub default-field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+    my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D; if
+                                           this asumption is false you will
+                                           need to wrte your own function
+                                           to pass to list-by(…) »»»
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 0, 255) ~ $val;
+        } else {
+            return t.color(0, 0, 255) ~ $val;
+        }
+    } else {
+        return $val;
+    }
+}
+
+sub default-head-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) is export {
+    if $idx < @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) is export {
+    if $idx < @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) is export {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        } else {
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        }
+    } else {
+        return '';
+    }
+}
+
+multi sub default-zip-flags(Str:D $key-name, Str:D @fields --> Hash[Str:D] ) is export {
+    my Str:D %hash = @fields Z=> @fields.map: { '-' };
+    %hash{$key-name} = '-';
+    return %hash;
+}
+
+=end code
+
+=head3 The array of hashes stuff
+
+=begin code :lang<raku>
+
+sub default-include-row-array(Str:D $prefix, Regex:D $pattern, Int:D $indx, Str:D @fields, %row --> Bool:D) is export {
+    for @fields -> $field {
+        my Str:D $value = ~(%row{$field} // '');
+        return True if $value.starts-with($prefix, :ignorecase) && $value ~~ $pattern;
+    }
+    return False;
+}
+
+sub default-head-value-array(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 255, 255) ~ $field;
+        } else {
+            return t.color(0, 255, 255) ~ $field;
+        }
+    } else {
+        return $field;
+    }
+}
+
+sub default-field-value-array(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+    my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D; if
+                                           this asumption is false you will
+                                           need to wrte your own function
+                                           to pass to list-by(…) »»»
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.color(0, 0, 255) ~ $val;
+        } else {
+            return t.color(0, 0, 255) ~ $val;
+        }
+    } else {
+        return $val;
+    }
+}
+
+sub default-head-between-array(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) is export {
+    if $idx < @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-between-array(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) is export {
+    if $idx < @fields.elems {
+        return '  ';
+    } else {
+        return '';
+    }
+}
+
+sub default-row-formatting-array(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) is export {
+    if $colour {
+        if $syntax { #`««« no real syntax Highlighting here this
+                           is a generic function write your own. »»»
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        } else {
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+            return t.bg-color(0, 255, 255) ~ t.bold ~ t.bright-blue if $cnt == -2;
+            return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+            return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,255,0)) ~ t.bold ~ t.bright-blue;
+        }
+    } else {
+        return '';
+    }
+}
+
+multi sub default-zip-flags(Str:D @fields --> Hash[Str:D] ) is export {
+    my Str:D %hash = @fields Z=> @fields.map: { '-' };
+    return %hash;
+}
+
+=end code
+
+=end pod
 
 sub default-include-row-array(Str:D $prefix, Regex:D $pattern, Int:D $indx, Str:D @fields, %row --> Bool:D) is export {
     for @fields -> $field {

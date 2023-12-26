@@ -1,4 +1,4 @@
-unit module Display::Listings:ver<0.1.6>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
+unit module Display::Listings:ver<0.1.7>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
 
 =begin pod
 
@@ -25,7 +25,7 @@ Table of Contents
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.6
+=VERSION 0.1.7
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 
@@ -542,7 +542,7 @@ L<Top of Document|#table-of-contents>
 
 =head4 An Example of the above code B<C<list-editors-backups(…)>> at work:
 
-!L<C<
+!L<C<sc list editors
 Permissions Size   User        Group       Date Modified                    Backup                                   
 =====================================================================================================================
 .rw-rw-r--  802.0B grizzlysmit grizzlysmit 2023-12-11T01:23:41.634625+11:00 editors.2023-12-11T01:24:20              

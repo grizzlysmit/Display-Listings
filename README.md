@@ -648,6 +648,8 @@ multi sub default-zip-flags(Str:D $key-name, Str:D @fields --> Hash[Str:D] ) is
 }
 ```
 
+[Top of Document](#table-of-contents)
+
 ### The array of hashes stuff
 
 ```raku
@@ -729,4 +731,6 @@ multi sub default-zip-flags(Str:D @fields --> Hash[Str:D] ) is export {
     return %hash;
 }
 ```
+
+[Top of Document](#table-of-contents)
 

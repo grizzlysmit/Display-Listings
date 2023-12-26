@@ -542,7 +542,7 @@ L<Top of Document|#table-of-contents>
 
 =head5 An Example of the above code B<C<list-editors-backups(…)>> at work:
 
-!L<https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png>
+!L</blob/main/docs/images/sc-list-editors-backups.png>
 
 L<Top of Document|#table-of-contents>
 

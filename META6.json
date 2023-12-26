@@ -24,7 +24,7 @@
         "bugtracker": "https://github.com/grizzlysmit/Display-Listings/issues"
     },
     "auth": "zef:grizzlysmit",
-    "version" : "0.1.7",
+    "version" : "0.1.8",
     "tags" : [ "text", "formatted", "listing", "ANSI", "highlighted" ],
   "test-depends": [
   ]

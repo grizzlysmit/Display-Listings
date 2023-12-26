@@ -1,4 +1,4 @@
-unit module Display::Listings:ver<0.1.7>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
+unit module Display::Listings:ver<0.1.8>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
 
 =begin pod
 
@@ -25,7 +25,7 @@ Table of Contents
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.7
+=VERSION 0.1.8
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 
@@ -542,17 +542,7 @@ L<Top of Document|#table-of-contents>
 
 =head4 An Example of the above code B<C<list-editors-backups(…)>> at work:
 
-!L<C<sc list editors
-Permissions Size   User        Group       Date Modified                    Backup                                   
-=====================================================================================================================
-.rw-rw-r--  802.0B grizzlysmit grizzlysmit 2023-12-11T01:23:41.634625+11:00 editors.2023-12-11T01:24:20              
-.rw-rw-r--  802.0B grizzlysmit grizzlysmit 2023-12-11T21:15:51.038790+11:00 editors.2023-12-11T21:16:28.034522+11:00 
-.rw-rw-r--  802.0B grizzlysmit grizzlysmit 2023-12-11T21:58:20.835630+11:00 editors.2023-12-11T21:58:57.832862+11:00 
-.rw-rw-r--  833.0B grizzlysmit grizzlysmit 2023-12-11T23:21:21.450694+11:00 editors.2023-12-11T23:21:58.449520+11:00 
-.rw-rw-r--  820.0B grizzlysmit grizzlysmit 2023-12-11T23:31:34.183842+11:00 editors.2023-12-11T23:32:11.181779+11:00 
-.rw-rw-r--  820.0B grizzlysmit grizzlysmit 2023-12-12T21:59:45.479111+11:00 editors.2023-12-12T22:00:22.468348+11:00 
-=====================================================================================================================
->|/docs/images/sc-list-editors-backups.png>
+!L<image not available here go to the github page|/docs/images/sc-list-editors-backups.png>
 
 L<Top of Document|#table-of-contents>
 

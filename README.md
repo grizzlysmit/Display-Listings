@@ -544,7 +544,7 @@ sub list-editors-backups(Str:D $prefix,
 
 ##### An Example of the above code **`list-editors-backups(…)`** at work:
 
-![/blob/main/docs/images/sc-list-editors-backups.png](/blob/main/docs/images/sc-list-editors-backups.png)
+![/docs/images/sc-list-editors-backups.png](/docs/images/sc-list-editors-backups.png)
 
 [Top of Document](#table-of-contents)
 

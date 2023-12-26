@@ -542,7 +542,7 @@ L<Top of Document|#table-of-contents>
 
 =head5 An Example of the above code B<C<list-editors-backups(…)>> at work:
 
-!L</blob/main/docs/images/sc-list-editors-backups.png>
+!L</docs/images/sc-list-editors-backups.png>
 
 L<Top of Document|#table-of-contents>
 

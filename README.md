@@ -26,7 +26,7 @@ Table of Contents
 
       * [Another example:](#another-example)
 
-      * [An Example of the above code **`list-editors-backups(…)`** at work:](#An-Example-of-the-above-code-list-editors-backups-at-work)
+        * [An Example of the above code **`list-editors-backups(…)`** at work:](#An-Example-of-the-above-code-list-editors-backups-at-work)
 
 NAME
 ====
@@ -41,7 +41,7 @@ Francis Grizzly Smit (grizzly@smit.id.au)
 VERSION
 =======
 
-0.1.5
+0.1.6
 
 TITLE
 =====

@@ -21,7 +21,7 @@ Table of Contents
 =item2 L<Examples:|#examples>
 =item3 L<A more complete example:|#a-more-complete-example>
 =item3 L<Another example:|#another-example>
-=item4 L<An Example of the above code B<C<list-editors-backups(…)>> at work:|#An-Example-of-the-above-code-list-editors-backups(…)-at-work>
+=item4 L<An Example of the above code B<C<list-editors-backups(…)>> at work:|#An-Example-of-the-above-code-list-editors-backups-at-work>
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)

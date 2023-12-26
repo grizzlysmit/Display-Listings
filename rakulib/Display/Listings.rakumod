@@ -1,4 +1,4 @@
-unit module Display::Listings:ver<0.1.2>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
+unit module Display::Listings:ver<0.1.3>:auth<Francis Grizzly Smit (grizzlysmit@smit.id.au)>;
 
 =begin pod
 
@@ -21,10 +21,11 @@ Table of Contents
 =item2 L<Examples:|#examples>
 =item3 L<A more complete example:|#a-more-complete-example>
 =item3 L<Another example:|#another-example>
+=item4 L<An Example of the above code B<C<list-editors-backups(…)>> at work:|#An-Example-of-the-above-code-list-editors-backups(…)-at-work>
 
 =NAME Display::Listings 
 =AUTHOR Francis Grizzly Smit (grizzly@smit.id.au)
-=VERSION 0.1.2
+=VERSION 0.1.3
 =TITLE Display::Listings
 =SUBTITLE A Raku module for displaying lines in a listing.
 
@@ -539,7 +540,11 @@ sub list-editors-backups(Str:D $prefix,
 
 L<Top of Document|#table-of-contents>
 
+=head5 An Example of the above code B<C<list-editors-backups(…)>> at work:
+
 !L<https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png>
+
+L<Top of Document|#table-of-contents>
 
 =end pod
 

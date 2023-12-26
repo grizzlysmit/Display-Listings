@@ -26,6 +26,8 @@ Table of Contents
 
       * [Another example:](#another-example)
 
+        * [An Example of the above code **`list-editors-backups(…)`** at work:](#An-Example-of-the-above-code-list-editors-backups(…)-at-work)
+
 NAME
 ====
 
@@ -39,7 +41,7 @@ Francis Grizzly Smit (grizzly@smit.id.au)
 VERSION
 =======
 
-0.1.2
+0.1.3
 
 TITLE
 =====
@@ -540,5 +542,9 @@ sub list-editors-backups(Str:D $prefix,
 
 [Top of Document](#table-of-contents)
 
+##### An Example of the above code **`list-editors-backups(…)`** at work:
+
 ![https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png](https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png)
+
+[Top of Document](#table-of-contents)
 

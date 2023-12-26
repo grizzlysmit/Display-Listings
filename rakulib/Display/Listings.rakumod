@@ -542,9 +542,7 @@ L<Top of Document|#table-of-contents>
 
 =head4 An Example of the above code B<C<list-editors-backups(…)>> at work:
 
-!L<
-
-=begin code :lang<bash>
+!L<C<
 Permissions Size   User        Group       Date Modified                    Backup                                   
 =====================================================================================================================
 .rw-rw-r--  802.0B grizzlysmit grizzlysmit 2023-12-11T01:23:41.634625+11:00 editors.2023-12-11T01:24:20              
@@ -554,10 +552,7 @@ Permissions Size   User        Group       Date Modified                    Back
 .rw-rw-r--  820.0B grizzlysmit grizzlysmit 2023-12-11T23:31:34.183842+11:00 editors.2023-12-11T23:32:11.181779+11:00 
 .rw-rw-r--  820.0B grizzlysmit grizzlysmit 2023-12-12T21:59:45.479111+11:00 editors.2023-12-12T22:00:22.468348+11:00 
 =====================================================================================================================
-
-=end code
-    
-|/docs/images/sc-list-editors-backups.png>
+>|/docs/images/sc-list-editors-backups.png>
 
 L<Top of Document|#table-of-contents>
 

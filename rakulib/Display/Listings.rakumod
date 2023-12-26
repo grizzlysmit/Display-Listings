@@ -936,6 +936,8 @@ multi sub default-zip-flags(Str:D $key-name, Str:D @fields --> Hash[Str:D] ) is
 
 =end code
 
+L<Top of Document|#table-of-contents>
+
 =head3 The array of hashes stuff
 
 =begin code :lang<raku>
@@ -1019,6 +1021,8 @@ multi sub default-zip-flags(Str:D @fields --> Hash[Str:D] ) is export {
 }
 
 =end code
+
+L<Top of Document|#table-of-contents>
 
 =end pod
 

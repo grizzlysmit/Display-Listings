@@ -24,7 +24,7 @@ Av8AAAD/AAAAAAAAAEAAAAAAAAAAGQAAAP/RAACR/35+/wAAAP8A+wL/AAAA2gAAAGX/AADa/35+
 AAAAZQAAAP8AAAD/AAAAAAAAAAAAAABlAAAA/4WFhQEAAAD/AAAAQAAAAAAAAAD/AAAA2gAAAGUA
 AAAAj/kAAAZgAAADgAAAgAEAAOAHAADgBwAAwAMAAIABAACAAQAAAAEAAAAAAAAAAAAAAAAAAAPA
 AACH4QAAzrMAAA==" rel="icon" type="image/x-icon" /><meta name="author" value="Francis Grizzly Smit (grizzly@smit.id.au)" />
-<meta name="version" value="0.1.1" />
+<meta name="version" value="0.1.2" />
 <style>.comment {
   color: #666; }
 
@@ -585,6 +585,7 @@ footer {
  <tr class="toc-level-3"><td class="toc-text"><a href="#list-by(…)">list-by(…)</a></td></tr>
  <tr class="toc-level-3"><td class="toc-text"><a href="#Examples:">Examples:</a></td></tr>
  <tr class="toc-level-4"><td class="toc-text"><a href="#A_more_complete_example:">A more complete example:</a></td></tr>
+ <tr class="toc-level-4"><td class="toc-text"><a href="#Another_example">Another example</a></td></tr>
 </table></div>
 </nav><div id="Display::Listings_0"></div><div class="subtitle"><p>A Raku module for displaying lines in a listing.</p></div><div class="pod-body"><section name="___top"><h1 id="Display::Listings"><a href="#___top" class="u" title="go to top of document">Display::Listings</a></h1>
 <h2 id="Table_of_Contents"><a href="#___top" class="u" title="go to top of document">Table of Contents</a></h2>
@@ -597,8 +598,13 @@ footer {
 <li><p><a href="#copyright">COPYRIGHT</a></p></li>
 <li><p><a href="#introduction">Introduction</a></p></li>
 <li><p><a href="#list-by">list-by(…)</a></p></li>
+<ul>
 <li><p><a href="#examples">Examples:</a></p></li>
+<ul>
 <li><p><a href="#a-more-complete-example">A more complete example:</a></p></li>
+<li><p><a href="#another-example">Another example:</a></p></li>
+</ul>
+</ul>
 </ul>
 <section>
 <h1 id="Name"><a href="#___top" class="u" title="go to top of document">NAME</a></h1>
@@ -615,24 +621,32 @@ footer {
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
                   Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
+                  Str:D :%flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%between-flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%head-flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%between-head-flags = default-zip-flags($key-name, @fields), 
                   :&amp;include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row, 
                   :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value, 
                   :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between,
                   :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value, 
                   :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between,
-                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting --&gt; Bool:D) is export
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting --&gt; Bool:D) is export {
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p><p>And</p><pre class="pod-block-code">multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $page-length,
                   Regex:D $pattern, Str:D @fields, %defaults, @rows, Int:D :$start-cnt = -3,
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
                   Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
+                  Str:D :%flags = default-zip-flags(@fields), 
+                  Str:D :%between-flags = default-zip-flags(@fields), 
+                  Str:D :%head-flags = default-zip-flags(@fields), 
+                  Str:D :%between-head-flags = default-zip-flags(@fields), 
                   :&amp;include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --&gt; Bool:D) = &amp;default-include-row-array, 
                   :&amp;head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-value-array, 
                   :&amp;head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --&gt; Str:D) = &amp;default-head-between-array,
                   :&amp;field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-field-value-array, 
                   :&amp;between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --&gt; Str:D) = &amp;default-between-array,
-                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting-array --&gt; Bool:D) is export
+                  :&amp;row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --&gt; Str:D) = &amp;default-row-formatting-array --&gt; Bool:D) is export {
 
 </pre><p><strong>Note: you have to be careful writing your own callbacks like <code>:&amp;include-row</code> you need to get the signature of said callback exactly right or you will run into difficult to debug errors, with no version of the <code>list-by</code> multi sub matching etc.</strong> </p><p><a href="#table-of-contents">Top of Document</a></p><h3 id="Examples:"><a href="#Display::Listings_0" class="u" title="go to top of document">Examples:</a></h3>
 <pre class="pod-block-code">use Display::Listings;
@@ -670,7 +684,10 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern,
                                                          @fields, %defaults, @rows);
 
 </pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="A_more_complete_example:"><a href="#Display::Listings_0" class="u" title="go to top of document">A more complete example:</a></h4>
-<pre class="pod-block-code">sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
+<pre class="pod-block-code">use Terminal::ANSI::OO :t;
+use Display::Listings;
+
+sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
                     Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export {
     my Str:D $key-name = 'key';
     my Str:D @fields = 'host', 'port', 'comment';
@@ -897,8 +914,156 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern,
 } #`««« sub list-by-all(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax,
                         Int:D $page-length, Regex:D $pattern --&gt; Bool:D) is export »»»
 
-</pre><p><a href="#table-of-contents">Top of Document</a></p></section>		</div>
-</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-23T19:34:59Z</span></div></footer>
+</pre><p><a href="#table-of-contents">Top of Document</a></p><h4 id="Another_example"><a href="#Display::Listings_0" class="u" title="go to top of document">Another example</a></h4>
+<pre class="pod-block-code">use Terminal::ANSI::OO :t;
+use Display::Listings;
+use File::Utils;
+
+
+sub list-editors-backups(Str:D $prefix,
+                         Bool:D $colour is copy,
+                         Bool:D $syntax,
+                         Regex:D $pattern,
+                         Int:D $page-length --&gt; Bool:D) is export {
+    $colour = True if $syntax;
+    my IO::Path @backups = $editor-config.IO.dir(:test(rx/ ^ 
+                                                           'editors.' \d ** 4 '-' \d ** 2 '-' \d ** 2
+                                                               [ 'T' \d **2 [ [ '.' || ':' ] \d ** 2 ] ** {0..2} [ [ '.' || '·' ] \d+ 
+                                                                   [ [ '+' || '-' ] \d ** 2 [ '.' || ':' ] \d ** 2 || 'z' ]?  ]?
+                                                               ]?
+                                                           $
+                                                         /
+                                                       )
+                                                );
+    my $actions = EditorsActions;
+    @backups .=grep: -&gt; IO::Path $fl { 
+                                my @file = $fl.slurp.split(&quot;\n&quot;);
+                                Editors.parse(@file.join(&quot;\x0A&quot;), :enc('UTF-8'), :$actions).made;
+                            };
+    @backups .=sort;
+    my @_backups = @backups.map: -&gt; IO::Path $f {
+          my %elt = backup =&gt; $f.basename, perms =&gt; symbolic-perms($f, :$colour, :$syntax),
+                      user =&gt; $f.user, group =&gt; $f.group, size =&gt; $f.s, modified =&gt; $f.modified;
+          %elt;
+    };
+    my Str:D @fields = 'perms', 'size', 'user', 'group', 'modified', 'backup';
+    my       %defaults;
+    my Str:D %fancynames = perms =&gt; 'Permissions', size =&gt; 'Size',
+                             user =&gt; 'User', group =&gt; 'Group',
+                             modified =&gt; 'Date Modified', backup =&gt; 'Backup';
+    sub include-row(Str:D $prefix, Regex:D $pattern, Int:D $idx, Str:D @fields, %row --&gt; Bool:D) {
+        my Str:D $value = ~(%row«backup» // '');
+        return True if $value.starts-with($prefix, :ignorecase) &amp;&amp; $value ~~ $pattern;
+        return False;
+    } # sub include-row(Str:D $prefix, Regex:D $pattern, Int:D $idx, Str:D @fields, %row --&gt; Bool:D) #
+    sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+        #dd $indx, $field, $colour, $syntax, @fields;
+        if $colour {
+            if $syntax { 
+                return t.color(0, 255, 255) ~ %fancynames{$field};
+            } else {
+                return t.color(0, 255, 255) ~ %fancynames{$field};
+            }
+        } else {
+            return %fancynames{$field};
+        }
+    } # sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) #
+    sub head-between(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) {
+        return ' ';
+    } # sub head-between(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --&gt; Str:D) #
+    sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+        my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D »»»
+        #dd $val, $value, $field;
+        if $syntax {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return t.color(255, 0, 0) ~ format-bytes($size);
+                }
+                when 'user'     { return t.color(255, 255, 0) ~ uid2username(+$value);    }
+                when 'group'    { return t.color(255, 255, 0) ~ gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return t.color(0, 0, 235) ~ $dt.Str;  
+                }
+                when 'backup'   { return t.color(255, 0, 255) ~ $val; }
+                default         { return t.color(255, 0, 0) ~ $val;   }
+            } # given $field #
+        } elsif $colour {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return t.color(0, 0, 255) ~ format-bytes($size);
+                }
+                when 'user'     { return t.color(0, 0, 255) ~ uid2username(+$value);    }
+                when 'group'    { return t.color(0, 0, 255) ~ gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return t.color(0, 0, 255) ~ $dt.Str;  
+                }
+                when 'backup'   { return t.color(0, 0, 255) ~ $val;   }
+                default         { return t.color(255, 0, 0) ~ $val;   }
+            } # given $field #
+        } else {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return format-bytes($size);
+                }
+                when 'user'     { return uid2username(+$value);    }
+                when 'group'    { return gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return $dt.Str;  
+                }
+                when 'backup'   { return $val;   }
+                default         { return $val;   }
+            } # given $field #
+        }
+    } # sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) #
+    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) {
+        return ' ';
+    } # sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --&gt; Str:D) #
+    sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) {
+        if $colour {
+            if $syntax { 
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,195,0)) ~ t.bold ~ t.bright-blue;
+            } else {
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,195,0)) ~ t.bold ~ t.bright-blue;
+            }
+        } else {
+            return '';
+        }
+    } # sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --&gt; Str:D) #
+    return list-by($prefix, $colour, $syntax, $page-length,
+                  $pattern, @fields, %defaults, @_backups,
+                  :!sort,
+                  :&amp;include-row, 
+                  :&amp;head-value, 
+                  :&amp;head-between,
+                  :&amp;field-value, 
+                  :&amp;between,
+                  :&amp;row-formatting);
+} #`««« sub list-editors-backups(Str:D $prefix,
+                         Bool:D $colour is copy,
+                         Bool:D $syntax,
+                         Regex:D $pattern,
+                         Int:D $page-length --&gt; Bool:D) is export »»»
+
+</pre><p><a href="#table-of-contents">Top of Document</a></p><p>!<a href="https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png">https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png</a></p></section>		</div>
+</div><footer><div>Rendered from <span class="path">UNNAMED</span></div><div>at <span class="time">2023-12-26T04:22:06Z</span></div></footer>
 	</body>
 </html>
 

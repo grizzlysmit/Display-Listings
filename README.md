@@ -20,9 +20,11 @@ Table of Contents
 
   * [list-by(…)](#list-by)
 
-  * [Examples:](#examples)
+    * [Examples:](#examples)
 
-  * [A more complete example:](#a-more-complete-example)
+      * [A more complete example:](#a-more-complete-example)
+
+      * [Another example:](#another-example)
 
 NAME
 ====
@@ -37,7 +39,7 @@ Francis Grizzly Smit (grizzly@smit.id.au)
 VERSION
 =======
 
-0.1.1
+0.1.2
 
 TITLE
 =====
@@ -71,12 +73,16 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Int:D :$start-cnt = -3, Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
                   Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
+                  Str:D :%flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%between-flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%head-flags = default-zip-flags($key-name, @fields), 
+                  Str:D :%between-head-flags = default-zip-flags($key-name, @fields), 
                   :&include-row:(Str:D $pref, Regex $pat, Str:D $k, Str:D @f, %r --> Bool:D) = &default-include-row, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting --> Bool:D) is export {
 ```
 
 [Top of Document](#table-of-contents)
@@ -89,12 +95,16 @@ multi sub list-by(Str:D $prefix, Bool:D $colour is copy, Bool:D $syntax, Int:D $
                   Bool:D :$starts-with-blank = True,
                   Str:D :$overline-header = '', Bool:D :$underline-header = True, Str:D :$underline = '=',
                   Bool:D :$put-line-at-bottom = True, Str:D :$line-at-bottom = '=', Bool:D :$sort = True,
+                  Str:D :%flags = default-zip-flags(@fields), 
+                  Str:D :%between-flags = default-zip-flags(@fields), 
+                  Str:D :%head-flags = default-zip-flags(@fields), 
+                  Str:D :%between-head-flags = default-zip-flags(@fields), 
                   :&include-row:(Str:D $pref, Regex:D $pat, Int:D $i, Str:D @f, %r --> Bool:D) = &default-include-row-array, 
                   :&head-value:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-value-array, 
                   :&head-between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds --> Str:D) = &default-head-between-array,
                   :&field-value:(Int:D $idx, Str:D $fld, $val, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-field-value-array, 
                   :&between:(Int:D $idx, Str:D $fld, Bool:D $c, Bool:D $syn, Str:D @flds, %r --> Str:D) = &default-between-array,
-                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export
+                  :&row-formatting:(Int:D $cnt, Bool:D $c, Bool:D $syn --> Str:D) = &default-row-formatting-array --> Bool:D) is export {
 ```
 
 **Note: you have to be careful writing your own callbacks like `:&include-row` you need to get the signature of said callback exactly right or you will run into difficult to debug errors, with no version of the `list-by` multi sub matching etc.** 
@@ -144,6 +154,9 @@ list-by($prefix, $colour, $syntax, $page-length, $pattern,
 #### A more complete example:
 
 ```raku
+use Terminal::ANSI::OO :t;
+use Display::Listings;
+
 sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
                     Int:D $page-length, Regex:D $pattern --> Bool:D) is export {
     my Str:D $key-name = 'key';
@@ -373,4 +386,159 @@ sub list-by-all(Str:D $prefix, Bool:D $colour, Bool:D $syntax,
 ```
 
 [Top of Document](#table-of-contents)
+
+#### Another example
+
+```raku
+use Terminal::ANSI::OO :t;
+use Display::Listings;
+use File::Utils;
+
+
+sub list-editors-backups(Str:D $prefix,
+                         Bool:D $colour is copy,
+                         Bool:D $syntax,
+                         Regex:D $pattern,
+                         Int:D $page-length --> Bool:D) is export {
+    $colour = True if $syntax;
+    my IO::Path @backups = $editor-config.IO.dir(:test(rx/ ^ 
+                                                           'editors.' \d ** 4 '-' \d ** 2 '-' \d ** 2
+                                                               [ 'T' \d **2 [ [ '.' || ':' ] \d ** 2 ] ** {0..2} [ [ '.' || '·' ] \d+ 
+                                                                   [ [ '+' || '-' ] \d ** 2 [ '.' || ':' ] \d ** 2 || 'z' ]?  ]?
+                                                               ]?
+                                                           $
+                                                         /
+                                                       )
+                                                );
+    my $actions = EditorsActions;
+    @backups .=grep: -> IO::Path $fl { 
+                                my @file = $fl.slurp.split("\n");
+                                Editors.parse(@file.join("\x0A"), :enc('UTF-8'), :$actions).made;
+                            };
+    @backups .=sort;
+    my @_backups = @backups.map: -> IO::Path $f {
+          my %elt = backup => $f.basename, perms => symbolic-perms($f, :$colour, :$syntax),
+                      user => $f.user, group => $f.group, size => $f.s, modified => $f.modified;
+          %elt;
+    };
+    my Str:D @fields = 'perms', 'size', 'user', 'group', 'modified', 'backup';
+    my       %defaults;
+    my Str:D %fancynames = perms => 'Permissions', size => 'Size',
+                             user => 'User', group => 'Group',
+                             modified => 'Date Modified', backup => 'Backup';
+    sub include-row(Str:D $prefix, Regex:D $pattern, Int:D $idx, Str:D @fields, %row --> Bool:D) {
+        my Str:D $value = ~(%row«backup» // '');
+        return True if $value.starts-with($prefix, :ignorecase) && $value ~~ $pattern;
+        return False;
+    } # sub include-row(Str:D $prefix, Regex:D $pattern, Int:D $idx, Str:D @fields, %row --> Bool:D) #
+    sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+        #dd $indx, $field, $colour, $syntax, @fields;
+        if $colour {
+            if $syntax { 
+                return t.color(0, 255, 255) ~ %fancynames{$field};
+            } else {
+                return t.color(0, 255, 255) ~ %fancynames{$field};
+            }
+        } else {
+            return %fancynames{$field};
+        }
+    } # sub head-value(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) #
+    sub head-between(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) {
+        return ' ';
+    } # sub head-between(Int:D $indx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields --> Str:D) #
+    sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+        my Str:D $val = ~($value // ''); #`««« assumming $value is a Str:D »»»
+        #dd $val, $value, $field;
+        if $syntax {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return t.color(255, 0, 0) ~ format-bytes($size);
+                }
+                when 'user'     { return t.color(255, 255, 0) ~ uid2username(+$value);    }
+                when 'group'    { return t.color(255, 255, 0) ~ gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return t.color(0, 0, 235) ~ $dt.Str;  
+                }
+                when 'backup'   { return t.color(255, 0, 255) ~ $val; }
+                default         { return t.color(255, 0, 0) ~ $val;   }
+            } # given $field #
+        } elsif $colour {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return t.color(0, 0, 255) ~ format-bytes($size);
+                }
+                when 'user'     { return t.color(0, 0, 255) ~ uid2username(+$value);    }
+                when 'group'    { return t.color(0, 0, 255) ~ gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return t.color(0, 0, 255) ~ $dt.Str;  
+                }
+                when 'backup'   { return t.color(0, 0, 255) ~ $val;   }
+                default         { return t.color(255, 0, 0) ~ $val;   }
+            } # given $field #
+        } else {
+            given $field {
+                when 'perms'    { return $val; }
+                when 'size'     {
+                    my Int:D $size = +$value;
+                    return format-bytes($size);
+                }
+                when 'user'     { return uid2username(+$value);    }
+                when 'group'    { return gid2groupname(+$value);   }
+                when 'modified' {
+                    my Instant:D $m = +$value;
+                    my DateTime:D $dt = $m.DateTime.local;
+                    return $dt.Str;  
+                }
+                when 'backup'   { return $val;   }
+                default         { return $val;   }
+            } # given $field #
+        }
+    } # sub field-value(Int:D $idx, Str:D $field, $value, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) #
+    sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) {
+        return ' ';
+    } # sub between(Int:D $idx, Str:D $field, Bool:D $colour, Bool:D $syntax, Str:D @fields, %row --> Str:D) #
+    sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) {
+        if $colour {
+            if $syntax { 
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3; # three heading lines. #
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,195,0)) ~ t.bold ~ t.bright-blue;
+            } else {
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -3;
+                return t.bg-color(0, 0, 127) ~ t.bold ~ t.bright-blue if $cnt == -2;
+                return t.bg-color(255, 0, 255) ~ t.bold ~ t.bright-blue if $cnt == -1;
+                return (($cnt % 2 == 0) ?? t.bg-yellow !! t.bg-color(0,195,0)) ~ t.bold ~ t.bright-blue;
+            }
+        } else {
+            return '';
+        }
+    } # sub row-formatting(Int:D $cnt, Bool:D $colour, Bool:D $syntax --> Str:D) #
+    return list-by($prefix, $colour, $syntax, $page-length,
+                  $pattern, @fields, %defaults, @_backups,
+                  :!sort,
+                  :&include-row, 
+                  :&head-value, 
+                  :&head-between,
+                  :&field-value, 
+                  :&between,
+                  :&row-formatting);
+} #`««« sub list-editors-backups(Str:D $prefix,
+                         Bool:D $colour is copy,
+                         Bool:D $syntax,
+                         Regex:D $pattern,
+                         Int:D $page-length --> Bool:D) is export »»»
+```
+
+[Top of Document](#table-of-contents)
+
+![https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png](https://github.com/grizzlysmit/Display-Listings/blob/main/docs/images/sc-list-editors-backups.png)
 
